@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/tek-twisters/sl4a/apk_python32/app/src/main/assets"><file name="json2.js" path="/home/tek-twisters/sl4a/apk_python32/app/src/main/assets/json2.js"/><file name="android.js" path="/home/tek-twisters/sl4a/apk_python32/app/src/main/assets/android.js"/></source></dataSet><dataSet config="debug"><source path="/home/tek-twisters/sl4a/apk_python32/app/src/debug/assets"/></dataSet></merger>
