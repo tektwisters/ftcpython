@@ -66,7 +66,7 @@ public class PythonOp extends OpMode {
                         switch (charArray[0]) {
                             case 'A':
                                 //Set motor
-                                int power = new Integer(args[2]);
+                                double power = new Double(args[2]);
                                 motors.get(args[1]).setPower(power);
                                 break;
                             case 'B':
