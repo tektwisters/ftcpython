@@ -135,7 +135,52 @@ public class PythonOp extends OpMode {
                                 pwrite.println(new Double(strength).toString());
                                 pwrite.flush();
                                 break;
-                            
+                            case 'K':
+                                //getControllerValue
+                                if (arg[1] == "1") {
+                                    switch (arg[2]) {
+                                        case "a":
+                                            boolean result = controller1.a
+                                            if (result) {
+                                                pwrite.println("1");
+                                            }
+                                            else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "b":
+                                            boolean result = controller1.b
+                                            if (result) {
+                                                pwrite.println("1");
+                                            }
+                                            else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "x":
+                                            boolean result = controller.x
+                                            if (result) {
+                                                pwrite.println("1");
+                                            }
+                                            else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "y":
+                                            boolean result = controller.y
+                                            if (result) {
+                                                pwrite.println("1");
+                                            }
+                                            else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                    }
+                                }
                                 
                                 
                         }
