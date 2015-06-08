@@ -2,7 +2,7 @@
 
 How to build:
 
-1. Open apk_python32 as an exsisting Android Studio project
+1. Open apk_python27 as an exsisting Android Studio project
 
 2. Build with Android Studio
 
