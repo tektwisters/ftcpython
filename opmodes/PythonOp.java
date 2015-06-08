@@ -32,6 +32,8 @@ public class PythonOp extends OpMode {
         String ipaddress;
         int portnumber;
         Map<String,DcMotor> motors = new HashMap<String,DcMotor>();
+        Map<String,Servo> servos = new HashMap<String,Servo>();
+        Map<String,IrSeekerSensor> irSensors = new HashMap<String,IrSeekerSensor>();
 
         MyClientTask(String ip, int port) {
             ipaddress = ip;
@@ -94,6 +96,48 @@ public class PythonOp extends OpMode {
                                     motors.get(args[1]).setDirection(DcMotor.Direction.REVERSE);
                                 }
                                 break;
+                            case 'E':
+                                //initServo
+                                servos.put(args[1], hardwareMap.servo.get(args[1]));
+                                break;
+                            case 'F':
+                                //setServo
+                                float value = Float.parseFloat(args[2]);
+                                servos.get(args[1]).setPosition(value);
+                                pwrite.println(args[2]);
+                                pwrite.flush();
+                                break;
+                            case 'G':
+                                //initIrSensor
+                                irSensors.put(args[1], hardwareMap.irSeekerSensor.get(args[1]);
+                                break;
+                            case 'H':
+                                //signalDetected
+                                boolean result = irSensors.get(args[1]).signalDetected();
+                                if (result) {
+                                    String _result = "1";
+                                }
+                                else {
+                                    String _result = "0";
+                                }
+                                pwrite.println(_result);
+                                pwrite.flush();
+                                break;
+                            case 'I':
+                                //getAngle
+                                double angle = irSensors.get(args[1]).getAngle();
+                                pwrite.println(new Double(angle).toString());
+                                pwrite.flush();
+                                break;
+                            case 'J':
+                                //getStrength
+                                double strength = irSensors.get(args[1]).getStrength();
+                                pwrite.println(new Double(strength).toString());
+                                pwrite.flush();
+                                break;
+                            
+                                
+                                
                         }
 
                     }
