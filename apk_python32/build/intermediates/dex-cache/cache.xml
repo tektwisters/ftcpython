@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/tek-twisters/sl4a/apk_python32/app/libs/locale_platform.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0829dfa494c746b8ab018cdbbf4b6980b6707819">
+        <dex dex="/home/tek-twisters/sl4a/apk_python32/app/build/intermediates/pre-dexed/debug/locale_platform-b56b25879ce24e755d33dc2af61e1e3056301071.jar" />
+    </item>
+    <item
+        jar="/home/tek-twisters/sl4a/apk_python32/app/libs/script.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f24313ca040a7f8ab88a1188e2120fc2af45dc4e">
+        <dex dex="/home/tek-twisters/sl4a/apk_python32/app/build/intermediates/pre-dexed/debug/script-f51350bcade5ca0fc247ecbd74efae4fe138f74a.jar" />
+    </item>
+    <item
+        jar="/home/tek-twisters/sl4a/apk_python32/app/libs/libGoogleAnalytics.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b635fdd351d7031266c1e855903cd737763df97c">
+        <dex dex="/home/tek-twisters/sl4a/apk_python32/app/build/intermediates/pre-dexed/debug/libGoogleAnalytics-646a030f659b660a843db6445ce58f156410718d.jar" />
+    </item>
+    <item
+        jar="/home/tek-twisters/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/17.0/9c6ef172e8de35fd8d4d8783e4821e57cdef7445/guava-17.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9c6ef172e8de35fd8d4d8783e4821e57cdef7445">
+        <dex dex="/home/tek-twisters/sl4a/apk_python32/app/build/intermediates/pre-dexed/debug/guava-17.0-7c1fd984ad4c0417652f5e3f48006c606057dcf7.jar" />
+    </item>
+
+</items>
