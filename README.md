@@ -12,13 +12,11 @@ How to build:
 
 How to use:
 
-1. Open the PythonAPK app and it should create a notification that states that it is running. And it should also give two toasts that state "Starting server..." and "Listening for clients...".
+1. Open the FTC Robot Controller app
 
-2. Then open the FTC Robot Controller app
+2. On the driver station open the FTC Driver Station app and select the PythonOp opmode and press start
 
-3. On the driver station open the FTC Driver Station app and select the PythonOp opmode and press start
-
-4. If everything worked correctly then in the telemetry area it should say "Looped X times" with X being some number.
+3. If everything worked correctly then in the telemetry area it should say "Looped X times" with X being some number.
 
 How to customize:
 
