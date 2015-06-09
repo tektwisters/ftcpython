@@ -1,4 +1,4 @@
-import socket, time, android, numpy
+import socket, time, android
 
 droid = android.Android()
 
