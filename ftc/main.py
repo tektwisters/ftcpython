@@ -1,4 +1,4 @@
-import socket, time, android
+import socket, time, android, numpy
 
 droid = android.Android()
 
@@ -78,7 +78,55 @@ class IrSeekerSensor (object):
     def getStrength(self):
         tcpWrite('J,' + self.name)
         return float(tcpRead())
+
+class Gamepad(object):
+    def __init__(self,name):
+        self.name = name
+
+        self.buttons = {
+            'a': 'a',
+            'b': 'b',
+            'x': 'x',
+            'y': 'y',
+            'dpad_up': 'du',
+            'dpad_down': 'dd',
+            'dpad_left': 'dl',
+            'dpad_right': 'dr',
+            'left_bumper': 'lb',
+            'right_bumper': 'rb'
+            }
+
+        self.axes = {
+            'right_stick_x': 'rx',
+            'right_stick_y': 'ry',
+            'left_stick_x' : 'lx',
+            'left_stick_y' : 'ly',
+            'left_trigger' : 'lt',
+            'right_trigger': 'rt'
+            }
+
         
+
+    def __get_button__(self,button):
+        tcpWrite('K,' + self.name + ',' + button)
+        result = tcpRead()
+        if result == '1':
+            return True
+        else:
+            return False
+
+    def __get_axis__(self,axis):
+        tcpWrite('K,' + self.name + ',' + axis)
+        return float(tcpRead())
+
+    def get(self,thing):
+        if thing in self.buttons:
+            return self.__get_button__(self.buttons[thing])
+        elif thing in self.axes:
+            return self.__get_axis__(self.axes[thing])
+
+gamepad1 = Gamepad('1')
+gamepad2 = Gamepad('2')
 
 def running():
     tcpWrite('C')
@@ -90,6 +138,9 @@ def running():
 
 def telemetry(key,data):
     tcpWrite('B,' + key + ',' + data)
+
+def clip(value,minValue,maxValue):
+    return max(min(value, maxValue), minValue)
 
 #Make your own classes here
 class Demo(object):
@@ -173,6 +224,101 @@ class K9IrSeeker (object):
         telemetry("strength", "sig strength: " + str(strength))
         telemetry("left tgt pwr", "left pwr: " + str(left))
         telemetry("right tgt pwr", "right pwr: " + str(right))
+
+class K9TankDrive (object):
+    def __init__(self):
+        global ARM_MIN_RANGE, ARM_MAX_RANGE, CLAW_MIN_RANGE, CLAW_MAX_RANGE
+        ARM_MIN_RANGE = 0.20
+        ARM_MAX_RANGE = 0.90
+        CLAW_MIN_RANGE = 0.20
+        CLAW_MAX_RANGE = 0.7
+
+        global armDelta
+        armDelta = 0.1
+
+        global clawDelta
+        clawDelta = 0.1
+
+    def start(self):
+        global motorRight
+        motorRight = Motor("motor_2")
+        global motorLeft
+        motorLeft = Motor("motor_1",reverse=True)
+        global arm
+        arm = Servo("servo_1")
+        global claw
+        claw = Servo("servo_6")
+        global armPosition
+        armPosition = 0.2
+        global clawPosition
+        clawPosition = 0.2
+
+    def scaleInput(dVal):
+        scaleArray = [0.0,0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
+                      0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.0, 1.0]
+
+        index = int(dVal*16.0)
+        if index < 0:
+            index = -index
+        elif index > 16:
+            index = 16
+
+        dScale = 0.0
+        if dVal < 0:
+            dScale = -scaleArray[index]
+        else:
+            dScale = scaleArray[index]
+
+        return dScale
+
+    def loop(self):
+        left = -gamepad1.get("left_stick_y")
+        right = -gamepad1.get("right_stick_y")
+
+        right = clip(right,-1,1)
+        left = clip(left,-1,1)
+
+        right = self.scaleInput(right)
+        left = self.scaleInput(left)
+
+        motorRight.setPower(right)
+        motorLeft.setPower(left)
+
+        if gamepad1.get('a'):
+            armPosition += armDelta
+
+        if gamepad1.get('y'):
+            armPosition -= armDelta
+
+        if gamepad1.get('left_bumper'):
+            clawPosition += clawDelta
+
+        if gamepad1.get('left_trigger') > 0.25:
+            clawPosition -= clawDelta
+
+        if gamepad1.get('x'):
+            clawPosition += clawDelta
+
+        if gamepad1.get('b'):
+            clawPosition -= clawDelta
+
+        armPosition = clip(armPosition, ARM_MAX_RANGE, ARM_MAX_RANGE)
+        clawPosition = clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE)
+
+        arm.setPosition(armPosition)
+        claw.setPosition(clawPosition)
+
+        telemetry("Text", "*** Robot Data***")
+        telemetry("arm", "arm: " + str(armPosition))
+        telemetry("claw", "claw: " + str(clawPosition))
+        telemetry("left tgt pwr", "left pwr: " + str(left))
+        telemetry("right tgt pwr", "right pwr: " + str(right))
+        
+        
+
+        
+        
+        
 
 #State the currently selected class
 selected = Demo()
