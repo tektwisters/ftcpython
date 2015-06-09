@@ -24,6 +24,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An empty op mode serving as a template for custom OpModes
@@ -70,19 +71,18 @@ public class PythonOp extends OpMode {
 
                     boolean keep = true;
 
-                    String sendMessage;
                     String receiveMessage;
-                    while (keep) {
-//                    sendMessage = "test";
+                    //                    sendMessage = "test";
 //                    pwrite.println(sendMessage);
 //                    pwrite.flush();
+                    while (keep) {
                         if ((receiveMessage = receiveRead.readLine()) != null) {
                             char[] charArray = receiveMessage.toCharArray();
                             String[] args = receiveMessage.split(",");
                             switch (charArray[0]) {
                                 case 'A':
                                     //Set motor
-                                    double power = new Double(args[2]);
+                                    double power = Double.valueOf(args[2]);
                                     motors.get(args[1]).setPower(power);
                                     break;
                                 case 'B':
@@ -108,7 +108,7 @@ public class PythonOp extends OpMode {
                                 case 'D':
                                     //initMotor
                                     motors.put(args[1], hardwareMap.dcMotor.get(args[1]));
-                                    if (args[2] == "1") {
+                                    if (args[2].equals("1")) {
                                         motors.get(args[1]).setDirection(DcMotor.Direction.REVERSE);
                                     }
                                     break;
@@ -142,20 +142,21 @@ public class PythonOp extends OpMode {
                                 case 'I':
                                     //getAngle
                                     double angle = irSensors.get(args[1]).getAngle();
-                                    pwrite.println(new Double(angle).toString());
+                                    pwrite.println(Double.valueOf(angle).toString());
                                     pwrite.flush();
                                     break;
                                 case 'J':
                                     //getStrength
                                     double strength = irSensors.get(args[1]).getStrength();
-                                    pwrite.println(new Double(strength).toString());
+                                    pwrite.println(Double.valueOf(strength).toString());
                                     pwrite.flush();
                                     break;
                                 case 'K':
                                     //getControllerValue
                                     boolean pressed;
+                                    double joyval;
                                     Gamepad gamepad;
-                                    if (args[1] == "1") {
+                                    if (args[1].equals("1")) {
                                         gamepad = gamepad1;
                                     } else {
                                         gamepad = gamepad2;
@@ -197,6 +198,90 @@ public class PythonOp extends OpMode {
                                             }
                                             pwrite.flush();
                                             break;
+                                        case "rsx":
+                                            joyval = gamepad.right_stick_x;
+                                            pwrite.println(Double.valueOf(joyval).toString());
+                                            pwrite.flush();
+                                            break;
+                                        case "rsy":
+                                            joyval = gamepad.right_stick_y;
+                                            pwrite.println(Double.valueOf(joyval).toString());
+                                            pwrite.flush();
+                                            break;
+                                        case "lsx":
+                                            joyval = gamepad.left_stick_x;
+                                            pwrite.println(Double.valueOf(joyval).toString());
+                                            pwrite.flush();
+                                            break;
+                                        case "lsy":
+                                            joyval = gamepad.left_stick_y;
+                                            pwrite.println(Double.valueOf(joyval).toString());
+                                            pwrite.flush();
+                                            break;
+                                        case "du":
+                                            pressed = gamepad.dpad_up;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "dd":
+                                            pressed = gamepad.dpad_down;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "dl":
+                                            pressed = gamepad.dpad_left;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "dr":
+                                            pressed = gamepad.dpad_right;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "lb":
+                                            pressed = gamepad.left_bumper;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "rb":
+                                            pressed = gamepad.right_bumper;
+                                            if (pressed) {
+                                                pwrite.println("1");
+                                            } else {
+                                                pwrite.println("0");
+                                            }
+                                            pwrite.flush();
+                                            break;
+                                        case "lt":
+                                            joyval = gamepad.left_trigger;
+                                            pwrite.println(joyval);
+                                            pwrite.flush();
+                                            break;
+                                        case "rt":
+                                            joyval = gamepad.right_trigger;
+                                            pwrite.println(joyval);
+                                            pwrite.flush();
+                                            break;
                                     }
 
 
@@ -205,8 +290,6 @@ public class PythonOp extends OpMode {
                         }
                     }
                     sock.close();
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
