@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="/home/tek-twisters/sl4a/apk1/app/libs/libGoogleAnalytics.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b635fdd351d7031266c1e855903cd737763df97c">
-        <dex dex="/home/tek-twisters/sl4a/apk1/app/build/intermediates/pre-dexed/debug/libGoogleAnalytics-e7902d78d7501ba3e31da8294056122b34aceee5.jar" />
-    </item>
-    <item
-        jar="/home/tek-twisters/sl4a/apk1/app/libs/locale_platform.jar"
+        jar="/home/tek-twisters/Documents/ftcpython/apk_python27/app/libs/locale_platform.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="0829dfa494c746b8ab018cdbbf4b6980b6707819">
-        <dex dex="/home/tek-twisters/sl4a/apk1/app/build/intermediates/pre-dexed/debug/locale_platform-3f180d34c9ef9b83601bc8a9c7410fa14e6deafa.jar" />
+        <dex dex="/home/tek-twisters/Documents/ftcpython/apk_python27/app/build/intermediates/pre-dexed/release/locale_platform-2b08d177a83dadcfafd8e4570ca7d7e747b0c489.jar" />
     </item>
     <item
-        jar="/home/tek-twisters/sl4a/apk1/app/libs/script.jar"
+        jar="/home/tek-twisters/Documents/ftcpython/apk_python27/app/libs/libGoogleAnalytics.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b635fdd351d7031266c1e855903cd737763df97c">
+        <dex dex="/home/tek-twisters/Documents/ftcpython/apk_python27/app/build/intermediates/pre-dexed/release/libGoogleAnalytics-5fe665dd87480b3daff225507e151e7d5b658334.jar" />
+    </item>
+    <item
+        jar="/home/tek-twisters/Documents/ftcpython/apk_python27/app/libs/script.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="f24313ca040a7f8ab88a1188e2120fc2af45dc4e">
-        <dex dex="/home/tek-twisters/sl4a/apk1/app/build/intermediates/pre-dexed/debug/script-42dd38e1407b3465e31f32a7bd79de23a1371960.jar" />
+        <dex dex="/home/tek-twisters/Documents/ftcpython/apk_python27/app/build/intermediates/pre-dexed/release/script-61f143b02e058fd3d14767920e887f7574830f5a.jar" />
     </item>
     <item
         jar="/home/tek-twisters/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/17.0/9c6ef172e8de35fd8d4d8783e4821e57cdef7445/guava-17.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="9c6ef172e8de35fd8d4d8783e4821e57cdef7445">
-        <dex dex="/home/tek-twisters/sl4a/apk1/app/build/intermediates/pre-dexed/debug/guava-17.0-7c1fd984ad4c0417652f5e3f48006c606057dcf7.jar" />
+        <dex dex="/home/tek-twisters/Documents/ftcpython/apk_python27/app/build/intermediates/pre-dexed/release/guava-17.0-7c1fd984ad4c0417652f5e3f48006c606057dcf7.jar" />
     </item>
 
 </items>
