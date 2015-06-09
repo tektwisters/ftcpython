@@ -4,10 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.IrSeekerSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import java.io.BufferedReader;
@@ -26,6 +30,15 @@ import java.util.Map;
  */
 public class PythonOp extends OpMode {
 
+    public  void startPythonActivity() {
+        Context context = hardwareMap.appContext;
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage("com.android.python27");
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+    }
+
     boolean running;
 
     class MyClientTask extends Thread {
@@ -42,156 +55,161 @@ public class PythonOp extends OpMode {
 
         @Override
         public void run() {
-            try {
-                Socket sock = new Socket(ipaddress, portnumber);
+            boolean worked = false;
+            while (!worked) {
+                try {
+                    Socket sock = new Socket(ipaddress, portnumber);
 
+                    worked = true;
 
-                OutputStream ostream = sock.getOutputStream();
-                PrintWriter pwrite = new PrintWriter(ostream, true);
+                    OutputStream ostream = sock.getOutputStream();
+                    PrintWriter pwrite = new PrintWriter(ostream, true);
 
-                InputStream istream = sock.getInputStream();
-                BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
+                    InputStream istream = sock.getInputStream();
+                    BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
 
-                boolean keep = true;
+                    boolean keep = true;
 
-                String sendMessage;
-                String receiveMessage;
-                while (keep) {
+                    String sendMessage;
+                    String receiveMessage;
+                    while (keep) {
 //                    sendMessage = "test";
 //                    pwrite.println(sendMessage);
 //                    pwrite.flush();
-                    if ((receiveMessage = receiveRead.readLine()) != null) {
-                        char[] charArray = receiveMessage.toCharArray();
-                        String[] args = receiveMessage.split(",");
-                        switch (charArray[0]) {
-                            case 'A':
-                                //Set motor
-                                double power = new Double(args[2]);
-                                motors.get(args[1]).setPower(power);
-                                break;
-                            case 'B':
-                                //telemetry
-                                String key = args[1];
-                                String data = args[2];
-                                telemetry.addData(key, data);
-                                break;
-                            case 'C':
-                                //running
-                                String result;
-                                if (running) {
-                                    result = "1";
-                                } else {
-                                    result = "0";
-                                }
-                                pwrite.println(result);
-                                pwrite.flush();
-                                if (!running) {
-                                    keep = false;
-                                }
-                                break;
-                            case 'D':
-                                //initMotor
-                                motors.put(args[1], hardwareMap.dcMotor.get(args[1]));
-                                if (args[2] == "1") {
-                                    motors.get(args[1]).setDirection(DcMotor.Direction.REVERSE);
-                                }
-                                break;
-                            case 'E':
-                                //initServo
-                                servos.put(args[1], hardwareMap.servo.get(args[1]));
-                                break;
-                            case 'F':
-                                //setServo
-                                float value = Float.parseFloat(args[2]);
-                                servos.get(args[1]).setPosition(value);
-                                pwrite.println(args[2]);
-                                pwrite.flush();
-                                break;
-                            case 'G':
-                                //initIrSensor
-                                irSensors.put(args[1], hardwareMap.irSeekerSensor.get(args[1]);
-                                break;
-                            case 'H':
-                                //signalDetected
-                                boolean result = irSensors.get(args[1]).signalDetected();
-                                if (result) {
-                                    String _result = "1";
-                                }
-                                else {
-                                    String _result = "0";
-                                }
-                                pwrite.println(_result);
-                                pwrite.flush();
-                                break;
-                            case 'I':
-                                //getAngle
-                                double angle = irSensors.get(args[1]).getAngle();
-                                pwrite.println(new Double(angle).toString());
-                                pwrite.flush();
-                                break;
-                            case 'J':
-                                //getStrength
-                                double strength = irSensors.get(args[1]).getStrength();
-                                pwrite.println(new Double(strength).toString());
-                                pwrite.flush();
-                                break;
-                            case 'K':
-                                //getControllerValue
-                                if (arg[1] == "1") {
-                                    switch (arg[2]) {
+                        if ((receiveMessage = receiveRead.readLine()) != null) {
+                            char[] charArray = receiveMessage.toCharArray();
+                            String[] args = receiveMessage.split(",");
+                            switch (charArray[0]) {
+                                case 'A':
+                                    //Set motor
+                                    double power = new Double(args[2]);
+                                    motors.get(args[1]).setPower(power);
+                                    break;
+                                case 'B':
+                                    //telemetry
+                                    String key = args[1];
+                                    String data = args[2];
+                                    telemetry.addData(key, data);
+                                    break;
+                                case 'C':
+                                    //running
+                                    String result;
+                                    if (running) {
+                                        result = "1";
+                                    } else {
+                                        result = "0";
+                                    }
+                                    pwrite.println(result);
+                                    pwrite.flush();
+                                    if (!running) {
+                                        keep = false;
+                                    }
+                                    break;
+                                case 'D':
+                                    //initMotor
+                                    motors.put(args[1], hardwareMap.dcMotor.get(args[1]));
+                                    if (args[2] == "1") {
+                                        motors.get(args[1]).setDirection(DcMotor.Direction.REVERSE);
+                                    }
+                                    break;
+                                case 'E':
+                                    //initServo
+                                    servos.put(args[1], hardwareMap.servo.get(args[1]));
+                                    break;
+                                case 'F':
+                                    //setServo
+                                    float value = Float.parseFloat(args[2]);
+                                    servos.get(args[1]).setPosition(value);
+                                    pwrite.println(args[2]);
+                                    pwrite.flush();
+                                    break;
+                                case 'G':
+                                    //initIrSensor
+                                    irSensors.put(args[1], hardwareMap.irSeekerSensor.get(args[1]));
+                                    break;
+                                case 'H':
+                                    //signalDetected
+                                    String _result;
+                                    boolean signal = irSensors.get(args[1]).signalDetected();
+                                    if (signal) {
+                                        _result = "1";
+                                    } else {
+                                        _result = "0";
+                                    }
+                                    pwrite.println(_result);
+                                    pwrite.flush();
+                                    break;
+                                case 'I':
+                                    //getAngle
+                                    double angle = irSensors.get(args[1]).getAngle();
+                                    pwrite.println(new Double(angle).toString());
+                                    pwrite.flush();
+                                    break;
+                                case 'J':
+                                    //getStrength
+                                    double strength = irSensors.get(args[1]).getStrength();
+                                    pwrite.println(new Double(strength).toString());
+                                    pwrite.flush();
+                                    break;
+                                case 'K':
+                                    //getControllerValue
+                                    boolean pressed;
+                                    Gamepad gamepad;
+                                    if (args[1] == "1") {
+                                        gamepad = gamepad1;
+                                    } else {
+                                        gamepad = gamepad2;
+                                    }
+                                    switch (args[2]) {
                                         case "a":
-                                            boolean result = controller1.a
-                                            if (result) {
+                                            pressed = gamepad.a;
+                                            if (pressed) {
                                                 pwrite.println("1");
-                                            }
-                                            else {
+                                            } else {
                                                 pwrite.println("0");
                                             }
                                             pwrite.flush();
                                             break;
                                         case "b":
-                                            boolean result = controller1.b
-                                            if (result) {
+                                            pressed = gamepad.b;
+                                            if (pressed) {
                                                 pwrite.println("1");
-                                            }
-                                            else {
+                                            } else {
                                                 pwrite.println("0");
                                             }
                                             pwrite.flush();
                                             break;
                                         case "x":
-                                            boolean result = controller.x
-                                            if (result) {
+                                            pressed = gamepad.x;
+                                            if (pressed) {
                                                 pwrite.println("1");
-                                            }
-                                            else {
+                                            } else {
                                                 pwrite.println("0");
                                             }
                                             pwrite.flush();
                                             break;
                                         case "y":
-                                            boolean result = controller.y
-                                            if (result) {
+                                            pressed = gamepad.y;
+                                            if (pressed) {
                                                 pwrite.println("1");
-                                            }
-                                            else {
+                                            } else {
                                                 pwrite.println("0");
                                             }
                                             pwrite.flush();
                                             break;
                                     }
-                                }
-                                
-                                
-                        }
 
+
+                            }
+
+                        }
                     }
+                    sock.close();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                sock.close();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
 
@@ -212,6 +230,7 @@ public class PythonOp extends OpMode {
     @Override
     public void start() {
         running = true;
+        startPythonActivity();
         MyClientTask myClientTask = new MyClientTask("127.0.0.1",25658);
         myClientTask.start();
     }
