@@ -73,7 +73,7 @@ class Gamepad(object):
     def __get_button__(self,button):
         self.s.write('K,' + self.name + ',' + button)
         result = self.s.read()
-        if result == '1':
+        if result[0] == '1':
             return True
         else:
             return False
